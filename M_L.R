@@ -181,7 +181,7 @@
 > 
 > prediction_1 <- predict(model_1, sub_test, type = "class")
 > 
-> rpart.plot(model_1, main="Classification Tree", extra=102, under=TRUE, faclen=0)
+> rpart.plot(model_1, main="Decision Tree", extra=102, under=TRUE, faclen=0)
 > confusionMatrix(prediction_1, sub_test$classe)
 Confusion Matrix and Statistics
 

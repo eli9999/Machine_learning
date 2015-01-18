@@ -1,3 +1,73 @@
+## Cleaning memory.
+rm(list=ls(all=TRUE))
+
+## Set up working directory and checking it.
+setwd ("/folder_name")
+getwd()
+
+## Intalling missing packages, calling libraries. 
+## install.packages("names_of_packages_listed_below")
+
+library(caret)
+library(randomForest)
+library(rpart)
+library(rpart.plot)
+
+## Setting seed for random.
+set.seed(1234)
+
+## Assigning the training data set into train var, replacing all missing values with "NA".
+
+train <- read.csv("/folder_name/train.csv", na.strings=c("NA","#DIV/0!", ""))
+
+## The same thing for for testing data, assigning it to test.
+
+test <- read.csv("/folder_name/test.csv", na.strings=c("NA","#DIV/0!", ""))
+
+## Check up amount of vars for columns and raws 19622 x 160;   20 x 160.
+
+dim(train)
+dim(test)
+
+## Delete all  columns with missing values.
+
+train <- train[, colSums(is.na(train)) == 0]
+test <-test[, colSums(is.na(test)) == 0]
+
+## Delete vars, which we wont't use (columns 1 to 7).
+
+train <-train[, -c(1:7)]
+test <-test[, -c(1:7)]
+
+## See what we get now. 19622x 53; 20x53.
+
+dim(train)
+head(train)
+dim(test)
+head(test)
+
+## Partioning dataset into 2 parts in order to perform cross-validation by random subsampling without replacement. 
+
+## sub_train will be 75% and subTest - 25%.
+
+sub_samples <- createDataPartition(y=train$classe, p=0.75, list=FALSE)
+sub_train <- train[sub_samples, ] 
+sub_test <- train[-sub_samples, ]
+
+## Take a look.
+
+dim(sub_train)
+head(sub_train)
+dim(sub_test)
+head(sub_test)
+
+## Plot the levels of the variable classe.
+
+plot(sub_train$classe, col="gold", xlab="Classe levels", ylab="Frequency")
+
+## Level A is the most frequent with more than 4000 occurrences. Level D is the least frequent with about 2500 
+
+occurrences.
 
 ## Applying Decision Tree Model.
 
@@ -9,7 +79,7 @@ prediction_1 <- predict(model_1, sub_test, type = "class")
 
 ## Make plotting. 
 
-rpart.plot(model_1, main="Classification Tree", extra=102, under=TRUE, faclen=0)
+rpart.plot(model_1, main="Desicion Tree", extra=102, under=TRUE, faclen=0)
 
 ## Test results on our sub-test data set.
 
@@ -26,7 +96,8 @@ prediction_2 <- predict(model_2, sub_test, type = "class")
 
 confusionMatrix(prediction_2, sub_test$classe)
 
-## Accuracy for Random Forest model is 0.9957. It very high, let's predict outcome levels on the original testing data.
+## Accuracy for Random Forest model is 0.9957. It's very high, so let's predict... 
+## outcome levels on the original testing data.
 
 predict_outcome <- predict(model_2, test, type="class")
 predict_outcome
@@ -37,7 +108,7 @@ predict_outcome
 
 ## Write files.
 
-setwd ("/UCI Har Dataset")
+setwd ("/folder_name")
 
 pml_write_files = function(x){
   n = length(x)

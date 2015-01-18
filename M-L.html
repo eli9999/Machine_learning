@@ -1,0 +1,50 @@
+
+## Applying Decision Tree Model.
+
+model_1 <- rpart (classe ~ ., data=sub_train, method="class")
+
+## Make prediction.
+
+prediction_1 <- predict(model_1, sub_test, type = "class")
+
+## Make plotting. 
+
+rpart.plot(model_1, main="Classification Tree", extra=102, under=TRUE, faclen=0)
+
+## Test results on our sub-test data set.
+
+confusionMatrix(prediction_1, sub_test$classe)
+
+## Applying Random Forest Model.
+
+model_2 <- randomForest(classe ~. , data=sub_train, method="class")
+
+## Make prediction.
+prediction_2 <- predict(model_2, sub_test, type = "class")
+
+## Test results on our sub_test data set.
+
+confusionMatrix(prediction_2, sub_test$classe)
+
+## Accuracy for Random Forest model is 0.9957. It very high, let's predict outcome levels on the original testing data.
+
+predict_outcome <- predict(model_2, test, type="class")
+predict_outcome
+
+## 1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 
+##  B  A  B  A  A  E  D  B  A  A  B  C  B  A  E  E  A  B  B  B 
+## Levels: A B C D E
+
+## Write files.
+
+setwd ("/UCI Har Dataset")
+
+pml_write_files = function(x){
+  n = length(x)
+  for(i in 1:n){
+    filename = paste0("problem_id_", i, ".txt")
+    write.table(x[i], file=filename, quote=FALSE, row.names=FALSE, col.names = FALSE) }
+}
+
+pml_write_files(predict_outcome)
+

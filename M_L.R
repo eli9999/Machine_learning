@@ -255,6 +255,7 @@ Balanced Accuracy      0.9997   0.9968   0.9926   0.9960   1.0000
  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 
  B  A  B  A  A  E  D  B  A  A  B  C  B  A  E  E  A  B  B  B 
 Levels: A B C D E
+
 > setwd ("/UCI Har Dataset")
 > 
 > pml_write_files = function(x){

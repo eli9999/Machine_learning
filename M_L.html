@@ -97,7 +97,7 @@ prediction_2 <- predict(model_2, sub_test, type = "class")
 confusionMatrix(prediction_2, sub_test$classe)
 
 ## Accuracy for Random Forest model is 0.9957. It's very high, so let's predict... 
-## outcome levels on the original testing data.
+## outcome levels on the original testing data using Random Forest model.
 
 predict_outcome <- predict(model_2, test, type="class")
 predict_outcome
